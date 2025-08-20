@@ -1,11 +1,11 @@
 import pandas as pd
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-from functions import *
+from sklearn.metrics import classification_report, confusion_matrix
+from model import Model
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pickle
 
 # Paths
 DATA_PATH, RESULTS_PATH= "data", "results"
@@ -20,47 +20,37 @@ y = le.fit_transform(df["category"])
 # Create X input
 X = df.drop(columns=["category", "invoice_id", "date", "vat_percent", "currency", "paid"])
 
-# Classifying the columns for Sklearn Pipeline
-numeric_features = ["net_amount"]
-categorical_features = ["vendor", "payment_method"]
-text_features = "description"
-
-# Transformers
-categorical_transformer = OneHotEncoder(handle_unknown="ignore")
-text_transformer = CountVectorizer()
-
-# Creating Feature Engineering pipeline
-preprocessor = ColumnTransformer(
-    transformers=[
-        ('num', 'passthrough', numeric_features),
-        ('cat', categorical_transformer, categorical_features),
-        ('text', text_transformer, text_features)
-    ]
-)
-
-# Creating model pipeline
-model = Pipeline(
-    steps=[
-        ('preprocessor', preprocessor),
-        ('classifier', LogisticRegression(max_iter=10000, random_state=42))
-    ]
-)
-
 # Train-test split, DONT maintain the classes percentage distribution
-X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=None, test_size=0.3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.3, random_state=42)
+
+# Classifying the columns for Sklearn Pipeline and calling the Model
+model = Model(
+    numeric_features=["net_amount"],
+    categorical_features=["vendor", "payment_method"],
+    text_features="description"
+)
 
 # Fit the model
 model.fit(X_train, y_train)
 
-# Make a predict and evaluate
+# Make a predict
 y_pred = model.predict(X_test)
-accuracy, report, cm = evaluate_model(y_test, y_pred)
 
-# Print classification report
+# Get classification report
+report = classification_report(y_test, y_pred)
 print(f"Classification Report\n{report}")
 
 # Draw confusion matrix
-draw_confusion_matrix(cm, save_plot=True)
+y_test_labels = le.inverse_transform(y_test)
+y_pred_labels = le.inverse_transform(y_pred)
+cm = confusion_matrix(y_test_labels, y_pred_labels, labels=le.classes_)
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=le.classes_, yticklabels=le.classes_)
+plt.xlabel("Predicted Labels")
+plt.ylabel("True Labels")
+plt.title("Confusion Matrix")
+plt.savefig(f"{RESULTS_PATH}/confusion_matrix.jpg", format="jpg")
 
 # Save model
-save_model(model, path=f"{RESULTS_PATH}/model.pkl")
+with open(f"{RESULTS_PATH}/model.pkl", 'wb') as f:
+        pickle.dump(model, f)

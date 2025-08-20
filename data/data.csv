@@ -39,3 +39,23 @@ INV0037,2025-03-27,TrainLines,40.00,EUR,8,Travel,Local train,Card,1
 INV0038,2025-02-28,OfficePlus,5.50,EUR,18,Office,Paper clips,Card,1
 INV0039,2025-01-30,ConsultPro,950.00,EUR,18,Consulting,MVP planning,BankTransfer,1
 INV0040,2025-06-30,AlphaSoft,1200.00,EUR,18,Software,Analytics license,Card,1
+INV0041,2025-07-02,BlueAir,95.00,EUR,8,Travel,Flight Istanbul–Berlin,Card,1
+INV0042,2025-07-05,OfficePlus,32.00,EUR,18,Office,Desk organizer,BankTransfer,1
+INV0043,2025-07-07,CityElectric,70.00,EUR,18,Utilities,Electricity July,DirectDebit,1
+INV0044,2025-07-10,QuickAds,400.00,EUR,18,Marketing,Facebook ads campaign,Card,1
+INV0045,2025-07-12,AlphaSoft,1200.00,EUR,18,Software,Analytics license,Card,1
+INV0046,2025-07-15,TravelCo,130.00,EUR,8,Travel,Taxi service,Cash,1
+INV0047,2025-07-18,OfficePlus,90.00,EUR,18,Office,Printer toner,BankTransfer,1
+INV0048,2025-07-20,NetUtilities,45.00,EUR,18,Utilities,Water bill,DirectDebit,1
+INV0049,2025-07-22,ConsultPro,550.00,EUR,18,Consulting,Software architecture review,BankTransfer,0
+INV0050,2025-07-25,AlphaSoft,1200.00,EUR,18,Software,Analytics license,Card,1
+INV0051,2025-07-28,HostelStay,260.00,EUR,8,Travel,Accommodation Berlin,Cash,1
+INV0052,2025-08-01,OfficePlus,25.00,EUR,18,Office,Staples and pens,Card,1
+INV0053,2025-08-03,EnergyCorp,80.00,EUR,18,Utilities,Gas bill,DirectDebit,1
+INV0054,2025-08-06,SocialBoost,470.00,EUR,18,Marketing,Instagram ads,Card,0
+INV0055,2025-08-09,AlphaSoft,1200.00,EUR,18,Software,Analytics license,Card,1
+INV0056,2025-08-12,TrainLines,65.00,EUR,8,Travel,Intercity train,Card,1
+INV0057,2025-08-15,OfficePlus,155.00,EUR,18,Office,Monitor and keyboard,BankTransfer,1
+INV0058,2025-08-18,CloudServe,100.00,EUR,18,Software,Cloud hosting monthly,Card,1
+INV0059,2025-08-20,CoffeeHouse,13.00,EUR,18,Other,Client meeting coffee,Cash,1
+INV0060,2025-08-22,ConsultPro,720.00,EUR,18,Consulting,Architecture review,BankTransfer,1
