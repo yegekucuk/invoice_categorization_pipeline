@@ -34,3 +34,6 @@ class Model():
 
     def predict(self, x):
         return self.classifier.predict(x)
+
+    def __str__(self):
+        return f"Model: {self.classifier}"

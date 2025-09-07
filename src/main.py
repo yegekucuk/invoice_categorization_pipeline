@@ -1,57 +1,44 @@
-import pandas as pd
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix
-from model import Model
-import matplotlib.pyplot as plt
-import seaborn as sns
 import pickle
+import pandas as pd
+from Model import Model
+from sklearn.preprocessing import LabelEncoder
 
-# Paths
-DATA_PATH, RESULTS_PATH= "data", "results"
+RESULTS_PATH = "results"
 
-# Import Pandas DataFrame
-df = pd.read_csv(f"{DATA_PATH}/data.csv")
+model:Model
+le:LabelEncoder
 
-# Create Y output
-le = LabelEncoder()
-y = le.fit_transform(df["category"])
+def load():
+    # Assign global variables
+    global model, le
+    # Load model
+    with open(f"{RESULTS_PATH}/model.pkl", 'rb') as f:
+        model = pickle.load(f)
+    # Load y_encoder
+    with open(f"{RESULTS_PATH}/y_encoder.pkl", 'rb') as f:
+        le = pickle.load(f)
+    print(model)
+    print(le)
 
-# Create X input
-X = df.drop(columns=["category", "invoice_id", "date", "vat_percent", "currency", "paid"])
+def run():
+    # Item features
+    description = input("Enter the name of your item: ")
+    vendor = input("Enter the name of vendor: ")
+    net_amount = input("Enter the price of item: ")
+    
+    # Create input for the model
+    x = []
+    x.append([vendor, net_amount, description])
+    x = pd.DataFrame(x, columns=["vendor", "net_amount", "description"])
+    
+    # Make a prediction
+    y_pred = model.predict(x)
+    y_pred = le.inverse_transform(y_pred)
+    print(f"Predict: {str(y_pred[0])}")
 
-# Train-test split, DONT maintain the classes percentage distribution
-X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.3, random_state=42)
-
-# Classifying the columns for Sklearn Pipeline and calling the Model
-model = Model(
-    numeric_features=["net_amount"],
-    categorical_features=["vendor", "payment_method"],
-    text_features="description"
-)
-
-# Fit the model
-model.fit(X_train, y_train)
-
-# Make a predict
-y_pred = model.predict(X_test)
-y_test_labels = le.inverse_transform(y_test)
-y_pred_labels = le.inverse_transform(y_pred)
-
-
-# Get classification report
-report = classification_report(y_test_labels, y_pred_labels, labels=le.classes_)
-print(f"Classification Report\n{report}")
-
-# Draw confusion matrix
-cm = confusion_matrix(y_test_labels, y_pred_labels, labels=le.classes_)
-plt.figure(figsize=(10, 8))
-sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=le.classes_, yticklabels=le.classes_)
-plt.xlabel("Predicted Labels")
-plt.ylabel("True Labels")
-plt.title("Confusion Matrix")
-plt.savefig(f"{RESULTS_PATH}/confusion_matrix.jpg", format="jpg")
-
-# Save model
-with open(f"{RESULTS_PATH}/model.pkl", 'wb') as f:
-        pickle.dump(model, f)
+if __name__ == "__main__":
+    # Load the models
+    load()
+    # Run
+    while True:
+        run()
