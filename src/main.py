@@ -35,14 +35,15 @@ model.fit(X_train, y_train)
 
 # Make a predict
 y_pred = model.predict(X_test)
+y_test_labels = le.inverse_transform(y_test)
+y_pred_labels = le.inverse_transform(y_pred)
+
 
 # Get classification report
-report = classification_report(y_test, y_pred)
+report = classification_report(y_test_labels, y_pred_labels, labels=le.classes_)
 print(f"Classification Report\n{report}")
 
 # Draw confusion matrix
-y_test_labels = le.inverse_transform(y_test)
-y_pred_labels = le.inverse_transform(y_pred)
 cm = confusion_matrix(y_test_labels, y_pred_labels, labels=le.classes_)
 plt.figure(figsize=(10, 8))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=le.classes_, yticklabels=le.classes_)
